@@ -47,3 +47,21 @@ func (r *StudentRepository) Create(s models.Student) error {
 	)
 	return err
 }
+
+// Challenge 1
+func (r *StudentRepository) Update(id string, s models.Student) error {
+	_, err := r.DB.Exec(
+		"UPDATE students SET name = ?, major = ?, gpa = ? WHERE id = ?",
+		s.Name, s.Major, s.GPA, id,
+	)
+	return err
+}
+
+// Challenge 2
+func (r *StudentRepository) Delete(id string) error {
+	_, err := r.DB.Exec(
+		"DELETE FROM students WHERE id = ?",
+		id,
+	)
+	return err
+}
