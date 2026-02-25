@@ -35,7 +35,20 @@ func (h *StudentHandler) GetStudentByID(c *gin.Context) {
 func (h *StudentHandler) CreateStudent(c *gin.Context) {
 	var student models.Student
 	if err := c.ShouldBindJSON(&student); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON format"})
+		return
+	}
+	//Challenge 3
+	if student.Id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id must not be empty"})
+		return
+	}
+	if student.Name == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "name must not be empty"})
+		return
+	}
+	if student.GPA < 0.00 || student.GPA > 4.00 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "gpa must be between 0.00 and 4.00"})
 		return
 	}
 
@@ -47,14 +60,28 @@ func (h *StudentHandler) CreateStudent(c *gin.Context) {
 	c.JSON(http.StatusCreated, student)
 }
 
-// Challenge 1
+// Challenge 1 and 3
 func (h *StudentHandler) UpdateStudent(c *gin.Context) {
 	id := c.Param("id")
 	var student models.Student
 	if err := c.ShouldBindJSON(&student); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON format"})
 		return
 	}
+	//Challenge 3
+	if student.Id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id must not be empty"})
+		return
+	}
+	if student.Name == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "name must not be empty"})
+		return
+	}
+	if student.GPA < 0.00 || student.GPA > 4.00 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "gpa must be between 0.00 and 4.00"})
+		return
+	}
+
 	if err := h.Service.UpdateStudent(id, student); err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
 		return
