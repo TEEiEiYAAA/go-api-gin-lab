@@ -16,7 +16,7 @@ type StudentHandler struct {
 func (h *StudentHandler) GetStudents(c *gin.Context) {
 	students, err := h.Service.GetStudents()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
 	c.JSON(http.StatusOK, students)
@@ -53,7 +53,7 @@ func (h *StudentHandler) CreateStudent(c *gin.Context) {
 	}
 
 	if err := h.Service.CreateStudent(student); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create student. ID might already exist."})
 		return
 	}
 
